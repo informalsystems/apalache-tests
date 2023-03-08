@@ -27,12 +27,10 @@ then
     cd "$tmp_dir"
     git clone https://github.com/informalsystems/apalache.git
     cd apalache
-    make build-quick
+    make package
+    mkdir -p "${ROOT}/_apalache"
     version=$(./script/get-version.sh)
-    dst_dir="${ROOT}/_apalache/apalache-${version}"
-    mkdir -p "${dst_dir}/mod-distribution/target"
-    mv bin "${dst_dir}"
-    mv "mod-distribution/target/apalache-pkg-${version}-full.jar" "${dst_dir}/mod-distribution/target"
+    mv "target/universal/apalache-${version}" "${ROOT}/_apalache/apalache-${version}"
 
     # Save the version for use in CI
     echo "${version}" > "${ROOT}/_VERSION"
@@ -43,7 +41,7 @@ else
 
     cd "$tmp_dir"
     wget "https://github.com/informalsystems/apalache/releases/download/v${VERSION}/${zip_name}"
-    mkdir -p "${dst_dir}"
+    mkdir -p "${ROOT}/_apalache"
     unzip "${zip_name}" -d "${dst_dir}"
 
     # Save the version for use in CI
